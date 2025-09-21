@@ -1,0 +1,265 @@
+/* Botão toggle dos atalhos */
+.keyboard-shortcuts-toggle {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.keyboard-shortcuts-toggle:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.keyboard-shortcuts-toggle:active {
+  transform: translateY(0) scale(0.95);
+}
+
+/* Overlay do modal */
+.keyboard-shortcuts-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Modal dos atalhos */
+.keyboard-shortcuts-modal {
+  background: #1a1a1a;
+  border-radius: 16px;
+  padding: 0;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header do modal */
+.shortcuts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.shortcuts-header h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.close-shortcuts {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.close-shortcuts:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Conteúdo dos atalhos */
+.shortcuts-content {
+  padding: 24px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.shortcuts-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.shortcuts-content::-webkit-scrollbar-track {
+  background: #2a2a2a;
+  border-radius: 3px;
+}
+
+.shortcuts-content::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 3px;
+}
+
+.shortcuts-content::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+/* Categorias de atalhos */
+.shortcut-category {
+  margin-bottom: 24px;
+}
+
+.shortcut-category:last-child {
+  margin-bottom: 0;
+}
+
+.shortcut-category h4 {
+  color: #667eea;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #333;
+}
+
+/* Lista de atalhos */
+.shortcut-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.shortcut-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #2a2a2a;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.shortcut-item:hover {
+  background: #333;
+}
+
+/* Teclas dos atalhos */
+.shortcut-keys {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.key {
+  background: #444;
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #555;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  min-width: 24px;
+  text-align: center;
+}
+
+.key-separator {
+  color: #888;
+  font-size: 12px;
+  margin: 0 2px;
+}
+
+/* Descrição dos atalhos */
+.shortcut-description {
+  color: #ccc;
+  font-size: 14px;
+  flex: 1;
+  text-align: right;
+  margin-left: 16px;
+}
+
+/* Footer do modal */
+.shortcuts-footer {
+  padding: 16px 24px;
+  background: #222;
+  border-top: 1px solid #333;
+  text-align: center;
+}
+
+.shortcuts-footer p {
+  margin: 0;
+  color: #888;
+  font-size: 13px;
+}
+
+.shortcuts-footer .key {
+  background: #555;
+  font-size: 11px;
+  padding: 2px 6px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .keyboard-shortcuts-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+  
+  .shortcuts-header {
+    padding: 16px 20px;
+  }
+  
+  .shortcuts-content {
+    padding: 20px;
+  }
+  
+  .shortcut-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .shortcut-description {
+    text-align: left;
+    margin-left: 0;
+  }
+  
+  .keyboard-shortcuts-toggle {
+    bottom: 16px;
+    left: 16px;
+    width: 45px;
+    height: 45px;
+    font-size: 18px;
+  }
+}

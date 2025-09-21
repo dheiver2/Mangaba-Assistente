@@ -18,6 +18,7 @@ import UserMenu from './components/UserMenu';
 
 import ProviderSpecificSettings from './components/ProviderSpecificSettings';
 import AgentImportExport from './components/AgentImportExport';
+import KeyboardShortcuts from './components/KeyboardShortcuts';
 import { aiManager, AI_PROVIDERS } from './services/aiService';
 import { sendMessage } from './services/geminiService';
 import { exportConversation } from './services/exportService';
@@ -46,7 +47,7 @@ function App() {
   const [currentAIProvider, setCurrentAIProvider] = useState('gemini');
   const [conversations, setConversations] = useState([]);
   const [currentConversationId, setCurrentConversationId] = useState(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [showGPTManager, setShowGPTManager] = useState(false);
   const [editingMessage, setEditingMessage] = useState(null);
@@ -67,6 +68,8 @@ function App() {
   });
   const [typingStatus, setTypingStatus] = useState('');
   const [tokenCount, setTokenCount] = useState(0);
+  const [abortController, setAbortController] = useState(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeAgent, setActiveAgent] = useState(null);
@@ -78,6 +81,13 @@ function App() {
 
   const [showProviderSettings, setShowProviderSettings] = useState(false);
   const [showAgentImportExport, setShowAgentImportExport] = useState(false);
+  
+  // Estados para histórico de comandos
+  const [commandHistory, setCommandHistory] = useState([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  
+  // Estado para atalhos de teclado
+  const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
 
 
 
@@ -117,11 +127,7 @@ function App() {
       }
     }
 
-    // Carregar tema salvo
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      setIsDarkMode(savedTheme === 'dark');
-    }
+
 
     // Carregar mensagens favoritas
     const savedFavorites = localStorage.getItem('favoriteMessages');
@@ -134,7 +140,44 @@ function App() {
     if (savedAdvancedSettings) {
       setAdvancedSettings(JSON.parse(savedAdvancedSettings));
     }
+
+    // Carregar histórico de comandos
+    const savedCommandHistory = localStorage.getItem('commandHistory');
+    if (savedCommandHistory) {
+      setCommandHistory(JSON.parse(savedCommandHistory));
+    }
+
+    // Listener para redimensionamento da janela
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsSidebarOpen(false);
+      } else {
+        setIsSidebarOpen(true);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // useEffect para atalhos de teclado globais
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Ctrl + ? para abrir/fechar atalhos
+      if (event.ctrlKey && event.key === '?') {
+        event.preventDefault();
+        setShowKeyboardShortcuts(prev => !prev);
+      }
+      
+      // Esc para fechar atalhos
+      if (event.key === 'Escape' && showKeyboardShortcuts) {
+        setShowKeyboardShortcuts(false);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [showKeyboardShortcuts]);
 
   const saveCurrentConversation = (updatedMessages) => {
     if (!currentConversationId) return;
@@ -147,6 +190,53 @@ function App() {
     
     setConversations(updatedConversations);
     localStorage.setItem('conversations', JSON.stringify(updatedConversations));
+  };
+
+  // Função para navegar no histórico de comandos
+  const navigateHistory = (direction) => {
+    if (commandHistory.length === 0) return;
+
+    let newIndex;
+    if (direction === 'up') {
+      newIndex = historyIndex === -1 ? commandHistory.length - 1 : Math.max(0, historyIndex - 1);
+    } else {
+      newIndex = historyIndex === -1 ? -1 : Math.min(commandHistory.length - 1, historyIndex + 1);
+      if (newIndex === commandHistory.length - 1 && historyIndex === commandHistory.length - 1) {
+        newIndex = -1;
+      }
+    }
+
+    setHistoryIndex(newIndex);
+    if (newIndex === -1) {
+      setInput('');
+    } else {
+      setInput(commandHistory[newIndex]);
+    }
+  };
+
+  // Função para adicionar comando ao histórico
+  const addToHistory = (command) => {
+    if (!command.trim()) return;
+    
+    const newHistory = [...commandHistory];
+    
+    // Remover comando duplicado se existir
+    const existingIndex = newHistory.indexOf(command);
+    if (existingIndex !== -1) {
+      newHistory.splice(existingIndex, 1);
+    }
+    
+    // Adicionar comando no final
+    newHistory.push(command);
+    
+    // Manter apenas os últimos 50 comandos
+    if (newHistory.length > 50) {
+      newHistory.shift();
+    }
+    
+    setCommandHistory(newHistory);
+    localStorage.setItem('commandHistory', JSON.stringify(newHistory));
+    setHistoryIndex(-1);
   };
 
   const handleSendMessage = async () => {
@@ -226,10 +316,19 @@ function App() {
 
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
+    
+    // Adicionar ao histórico de comandos
+    addToHistory(input);
+    
     setInput('');
     setSelectedImages([]);
     setIsLoading(true);
+    setIsGenerating(true);
     setTypingStatus(`${AI_PROVIDERS[currentAIProvider?.toUpperCase()]?.name || 'IA'} está digitando...`);
+
+    // Criar novo AbortController para esta requisição
+    const controller = new AbortController();
+    setAbortController(controller);
 
     try {
       let response;
@@ -283,7 +382,51 @@ function App() {
       saveCurrentConversation(finalMessages);
     } finally {
       setIsLoading(false);
+      setIsGenerating(false);
       setTypingStatus('');
+      setAbortController(null);
+    }
+  };
+
+  // Função para parar a geração
+  const handleStopGeneration = () => {
+    if (abortController) {
+      abortController.abort();
+      setIsLoading(false);
+      setIsGenerating(false);
+      setTypingStatus('');
+      setAbortController(null);
+      
+      // Adicionar mensagem indicando que a geração foi interrompida
+      const stopMessage = {
+        id: Date.now(),
+        text: '⏹️ Geração interrompida pelo usuário',
+        sender: 'system',
+        timestamp: new Date().toISOString(),
+        isStopMessage: true
+      };
+      
+      const newMessages = [...messages, stopMessage];
+      setMessages(newMessages);
+      saveCurrentConversation(newMessages);
+    }
+  };
+
+  // Função para copiar mensagem
+  const handleCopyMessage = async (messageText) => {
+    try {
+      await navigator.clipboard.writeText(messageText);
+      // Feedback visual opcional - pode adicionar toast/notificação
+      console.log('Mensagem copiada para a área de transferência');
+    } catch (error) {
+      console.error('Erro ao copiar mensagem:', error);
+      // Fallback para navegadores mais antigos
+      const textArea = document.createElement('textarea');
+      textArea.value = messageText;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textArea);
     }
   };
 
@@ -305,6 +448,75 @@ function App() {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      navigateHistory('up');
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      navigateHistory('down');
+    }
+  };
+
+  const handleContinueGeneration = async (messageIndex) => {
+    if (isLoading) return;
+
+    const message = messages[messageIndex];
+    if (message.sender !== 'assistant') return;
+
+    setIsLoading(true);
+    setIsGenerating(true);
+    setTypingStatus(`${AI_PROVIDERS[currentAIProvider?.toUpperCase()]?.name || 'IA'} está continuando...`);
+
+    // Criar novo AbortController para esta requisição
+    const controller = new AbortController();
+    setAbortController(controller);
+
+    try {
+      const prompt = "Continue a resposta anterior de onde parou, mantendo o mesmo contexto e estilo.";
+      
+      const response = await aiManager.sendMessage(
+        prompt,
+        [...messages.slice(0, messageIndex + 1)],
+        currentAIProvider,
+        advancedSettings,
+        controller.signal
+      );
+
+      if (response && !controller.signal.aborted) {
+        const updatedMessages = messages.map((msg, index) => 
+          index === messageIndex 
+            ? { ...msg, text: msg.text + '\n\n' + response }
+            : msg
+        );
+        
+        setMessages(updatedMessages);
+        saveCurrentConversation(updatedMessages);
+      }
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Erro ao continuar geração:', error);
+        
+        const errorMessage = {
+          id: Date.now(),
+          text: `Erro ao continuar geração: ${error.message}`,
+          sender: 'assistant',
+          timestamp: new Date().toISOString(),
+          isError: true
+        };
+        
+        const newMessages = [...messages, errorMessage];
+        setMessages(newMessages);
+        saveCurrentConversation(newMessages);
+      }
+    } finally {
+      setIsLoading(false);
+      setIsGenerating(false);
+      setTypingStatus('');
+      setAbortController(null);
     }
   };
 
@@ -553,10 +765,7 @@ function App() {
     }
   }, [messages, currentConversationId, conversations]);
 
-  // Aplicar tema ao documento
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
+
 
   if (showGPTManager) {
     return (
@@ -624,56 +833,62 @@ function App() {
             )}
           </div>
           <div className="header-right">
-            {currentConversationId && (
-              <>
-                <button 
-                  className="fullscreen-btn"
-                  onClick={() => setIsFullscreen(!isFullscreen)}
-                  title={isFullscreen ? "Sair da tela cheia" : "Modo tela cheia"}
-                >
-                  {isFullscreen ? (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
-                    </svg>
-                  ) : (
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-                    </svg>
-                  )}
-                </button>
-                <button 
-                  className="share-btn"
-                  onClick={() => {
-                    const conversation = conversations.find(conv => conv.id === currentConversationId);
-                    if (conversation) {
-                      navigator.clipboard.writeText(`Conversa: ${conversation.title}\n\n${conversation.messages.map(msg => `${msg.sender === 'user' ? 'Usuário' : 'Assistente'}: ${msg.text}`).join('\n\n')}`);
-                      alert('Conversa copiada para a área de transferência!');
-                    }
-                  }}
-                  title="Compartilhar conversa"
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="18" cy="5" r="3"/>
+            {/* Botão de tela cheia - sempre visível */}
+            <button 
+              className="fullscreen-btn"
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              title={isFullscreen ? "Sair da tela cheia" : "Modo tela cheia"}
+            >
+              {isFullscreen ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+              )}
+            </button>
+            
+            {/* Botão de compartilhar - sempre visível */}
+            <button 
+              className="share-btn"
+              onClick={() => {
+                if (currentConversationId) {
+                  const conversation = conversations.find(conv => conv.id === currentConversationId);
+                  if (conversation) {
+                    navigator.clipboard.writeText(`Conversa: ${conversation.title}\n\n${conversation.messages.map(msg => `${msg.sender === 'user' ? 'Usuário' : 'Assistente'}: ${msg.text}`).join('\n\n')}`);
+                    alert('Conversa copiada para a área de transferência!');
+                  }
+                } else {
+                  alert('Inicie uma conversa para poder compartilhá-la!');
+                }
+              }}
+              title="Compartilhar conversa"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="18" cy="5" r="3"/>
                     <circle cx="6" cy="12" r="3"/>
                     <circle cx="18" cy="19" r="3"/>
                     <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
                     <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
                   </svg>
                 </button>
-                <button 
-                  className={`agent-btn ${activeAgent ? 'active' : ''}`}
-                  onClick={() => setIsAgentModalOpen(true)}
-                  title={activeAgent ? `Agente: ${activeAgent.name}` : 'Gerenciar agentes'}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
-                    <path d="M2 17L12 22L22 17"/>
-                    <path d="M2 12L12 17L22 12"/>
-                  </svg>
-                  {activeAgent && <span className="agent-indicator"></span>}
-                </button>
-              </>
-            )}
+            
+            {/* Botão de gestão de agentes - sempre visível */}
+            <button 
+              className={`agent-btn ${activeAgent ? 'active' : ''}`}
+              onClick={() => setIsAgentModalOpen(true)}
+              title={activeAgent ? `Agente: ${activeAgent.name}` : 'Gerenciar agentes'}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z"/>
+                <path d="M2 17L12 22L22 17"/>
+                <path d="M2 12L12 17L22 12"/>
+              </svg>
+              {activeAgent && <span className="agent-indicator"></span>}
+            </button>
+            
             <UserMenu />
           </div>
         </div>
@@ -683,34 +898,90 @@ function App() {
             <div className="welcome-screen">
               <h1>Como posso ajudar?</h1>
               <div className="config-info">
-                <p>💡 Comece uma nova conversa ou selecione uma conversa existente na barra lateral</p>
+                <p>Comece uma nova conversa ou selecione uma conversa existente na barra lateral</p>
               </div>
               <div className="suggested-prompts">
-                <div className="prompt-grid">
-                  <button 
-                    className="prompt-suggestion"
-                    onClick={() => handlePromptSuggestion('Crie uma história criativa')}
-                  >
-                    Crie uma história criativa
-                  </button>
-                  <button 
-                    className="prompt-suggestion"
-                    onClick={() => handlePromptSuggestion('Me ajude a planejar')}
-                  >
-                    Me ajude a planejar
-                  </button>
-                  <button 
-                    className="prompt-suggestion"
-                    onClick={() => handlePromptSuggestion('Me ensine algo novo')}
-                  >
-                    Me ensine algo novo
-                  </button>
-                  <button 
-                    className="prompt-suggestion"
-                    onClick={() => handlePromptSuggestion('Brainstorm comigo')}
-                  >
-                    Brainstorm comigo
-                  </button>
+                <div className="prompt-categories">
+                  <div className="prompt-category">
+                    <div className="category-header">
+                      <h3>Criatividade</h3>
+                      <p>Explore sua imaginação e crie conteúdo original</p>
+                    </div>
+                    <div className="prompt-grid">
+                      <button 
+                        className="prompt-card"
+                        onClick={() => handlePromptSuggestion('Crie uma história criativa sobre viagem no tempo')}
+                      >
+                        <div className="card-content">
+                          <h4>História criativa</h4>
+                          <p>Desenvolva narrativas envolventes e originais</p>
+                        </div>
+                      </button>
+                      <button 
+                        className="prompt-card"
+                        onClick={() => handlePromptSuggestion('Me ajude a fazer um brainstorm de ideias inovadoras')}
+                      >
+                        <div className="card-content">
+                          <h4>Brainstorm</h4>
+                          <p>Gere ideias inovadoras e soluções criativas</p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="prompt-category">
+                    <div className="category-header">
+                      <h3>Produtividade</h3>
+                      <p>Otimize seu tempo e organize suas tarefas</p>
+                    </div>
+                    <div className="prompt-grid">
+                      <button 
+                        className="prompt-card"
+                        onClick={() => handlePromptSuggestion('Me ajude a planejar minha semana de trabalho')}
+                      >
+                        <div className="card-content">
+                          <h4>Planejamento</h4>
+                          <p>Estruture sua agenda de forma eficiente</p>
+                        </div>
+                      </button>
+                      <button 
+                        className="prompt-card"
+                        onClick={() => handlePromptSuggestion('Crie um resumo executivo sobre inteligência artificial')}
+                      >
+                        <div className="card-content">
+                          <h4>Resumo</h4>
+                          <p>Sintetize informações complexas</p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="prompt-category">
+                    <div className="category-header">
+                      <h3>Aprendizado</h3>
+                      <p>Expanda seus conhecimentos em diversas áreas</p>
+                    </div>
+                    <div className="prompt-grid">
+                      <button 
+                        className="prompt-card"
+                        onClick={() => handlePromptSuggestion('Me ensine sobre programação Python de forma simples')}
+                      >
+                        <div className="card-content">
+                          <h4>Programação</h4>
+                          <p>Aprenda conceitos de desenvolvimento</p>
+                        </div>
+                      </button>
+                      <button 
+                        className="prompt-card"
+                        onClick={() => handlePromptSuggestion('Explique conceitos de física quântica para iniciantes')}
+                      >
+                        <div className="card-content">
+                          <h4>Ciências</h4>
+                          <p>Explore conhecimentos científicos</p>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -778,15 +1049,32 @@ function App() {
                             {favoriteMessages.includes(message.id) ? '⭐' : '☆'}
                           </button>
                           {message.sender === 'assistant' && (
-                            <button 
-                              className="regenerate-btn"
-                              onClick={() => handleRegenerateResponse(index)}
-                              title="Regenerar resposta"
-                              disabled={isLoading}
-                            >
-                              🔄
-                            </button>
+                            <>
+                              <button 
+                                className="regenerate-btn"
+                                onClick={() => handleRegenerateResponse(index)}
+                                title="Regenerar resposta"
+                                disabled={isLoading}
+                              >
+                                🔄
+                              </button>
+                              <button 
+                                className="continue-btn"
+                                onClick={() => handleContinueGeneration(index)}
+                                title="Continuar geração"
+                                disabled={isLoading}
+                              >
+                                ➡️
+                              </button>
+                            </>
                           )}
+                          <button 
+                            className="copy-btn"
+                            onClick={() => handleCopyMessage(message.text)}
+                            title="Copiar mensagem"
+                          >
+                            📋
+                          </button>
                           <button 
                             className="edit-btn"
                             onClick={() => handleEditMessage(index, message.text)}
@@ -815,7 +1103,10 @@ function App() {
                      </svg>
                    </div>
                   <div className="message-content">
-                    <div className="typing-status">{typingStatus}</div>
+                    <div className="typing-status">
+                      <span className="typing-icon">✨</span>
+                      {typingStatus}
+                    </div>
                     <div className="typing-indicator">
                       <span></span>
                       <span></span>
@@ -834,17 +1125,24 @@ function App() {
             onRemoveImage={handleRemoveImage}
             selectedImages={selectedImages}
           />
-          {(advancedSettings.showTokenCount || tokenCount > 0) && (
-            <div className="token-counter">
-              <span className="token-count">{tokenCount} tokens estimados</span>
-              <span className="token-limit">/ {advancedSettings.maxTokens} máx</span>
+          <div className="character-counter">
+            <div className="counter-row">
+              <span className="char-count">{input.length} caracteres</span>
+              <span className="word-count">{input.trim() ? input.trim().split(/\s+/).length : 0} palavras</span>
             </div>
-          )}
+            {(advancedSettings.showTokenCount || tokenCount > 0) && (
+              <div className="counter-row">
+                <span className="token-count">{tokenCount} tokens estimados</span>
+                <span className="token-limit">/ {advancedSettings.maxTokens} máx</span>
+              </div>
+            )}
+          </div>
           <div className="input-wrapper">
             <textarea
               value={input}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
+              onKeyDown={handleKeyDown}
               placeholder="Pergunte alguma coisa"
               className="message-input"
               rows={1}
@@ -884,17 +1182,27 @@ function App() {
                 e.target.value = '';
               }}
             />
-            <button 
-              onClick={handleSendMessage}
-              className="send-button"
-              disabled={!input.trim() || isLoading}
-            >
-              {isLoading ? (
-                <span className="loading-spinner">⟳</span>
-              ) : (
-                <span className="send-icon">↑</span>
-              )}
-            </button>
+            {isGenerating ? (
+              <button 
+                onClick={handleStopGeneration}
+                className="stop-button"
+                title="Parar Geração"
+              >
+                <span className="stop-icon">⏹</span>
+              </button>
+            ) : (
+              <button 
+                onClick={handleSendMessage}
+                className="send-button"
+                disabled={!input.trim() || isLoading}
+              >
+                {isLoading ? (
+                  <span className="loading-spinner">⟳</span>
+                ) : (
+                  <span className="send-icon">↑</span>
+                )}
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -957,6 +1265,10 @@ function App() {
       />
       
       <BrazilianFlags />
+      <KeyboardShortcuts 
+        isVisible={showKeyboardShortcuts}
+        onToggle={() => setShowKeyboardShortcuts(!showKeyboardShortcuts)}
+      />
     </div>
   );
 }

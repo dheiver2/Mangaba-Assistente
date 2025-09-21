@@ -648,7 +648,7 @@
   min-width: 350px;
   max-width: 400px;
   position: fixed;
-  z-index: 9999;
+  z-index: 1002;
 }
 
 /* Ajustar posição do dropdown baseado na posição do trigger */

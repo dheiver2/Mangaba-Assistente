@@ -131,8 +131,8 @@ const Sidebar = ({
             <button 
               className="action-btn settings-btn" 
               onClick={onOpenAdvancedSettings}
-              title="Abrir configurações"
-              aria-label="Configurações"
+              title="Configurações e Gestão de Provedores de IA"
+              aria-label="Configurações e Gestão de Provedores"
             >
               <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="3"/>

@@ -7,13 +7,14 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 12px;
+  padding: 8px;
   border-radius: 8px;
-  background-color: var(--bg-color);
+  background-color: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-color);
   cursor: pointer;
   transition: all 0.2s ease;
+  height: 40px;
 }
 
 .user-menu-btn:hover {
@@ -22,20 +23,20 @@
 }
 
 .user-avatar {
-  width: 32px;
-  height: 32px;
+  width: 24px;
+  height: 24px;
   background-color: var(--primary-color);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.1;
+  flex-shrink: 0;
 }
 
 .user-icon {
-  width: 16px;
-  height: 16px;
-  color: var(--primary-color);
+  width: 14px;
+  height: 14px;
+  color: white;
 }
 
 .user-info {
@@ -85,7 +86,7 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--border-color);
   padding: 8px 0;
-  z-index: 50;
+  z-index: 9999;
   animation: slideDown 0.2s ease;
 }
 
@@ -119,13 +120,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.1;
 }
 
 .user-icon-large {
   width: 20px;
   height: 20px;
-  color: var(--primary-color);
+  color: white;
 }
 
 .user-text {

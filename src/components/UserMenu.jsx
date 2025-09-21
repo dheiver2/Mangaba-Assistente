@@ -39,7 +39,7 @@ const UserMenu = () => {
           <User className="user-icon" />
         </div>
         <div className="user-info">
-          <p className="user-name">{user.name}</p>
+          <p className="user-name">{user.fullName || `${user.firstName} ${user.lastName}`}</p>
           <p className="user-email">{user.email}</p>
         </div>
         <ChevronDown className={`chevron-icon ${isOpen ? 'rotated' : ''}`} />
@@ -54,7 +54,7 @@ const UserMenu = () => {
                 <User className="user-icon-large" />
               </div>
               <div className="user-text">
-                <p className="user-name-large">{user.name}</p>
+                <p className="user-name-large">{user.fullName || `${user.firstName} ${user.lastName}`}</p>
                 <p className="user-email-small">{user.email}</p>
                 <p className="user-status">● Ativo</p>
               </div>

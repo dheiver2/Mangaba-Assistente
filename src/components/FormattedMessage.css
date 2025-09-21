@@ -169,7 +169,6 @@
   font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
   font-size: 13px;
   line-height: 1.4;
-  max-height: 400px;
   transition: max-height 0.3s ease;
 }
 
