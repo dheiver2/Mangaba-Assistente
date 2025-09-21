@@ -1,0 +1,241 @@
+.model-status-indicator {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.model-status-indicator.compact {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: rgba(var(--status-color-rgb, 108, 117, 125), 0.1);
+  border: 1px solid rgba(var(--status-color-rgb, 108, 117, 125), 0.3);
+  color: var(--status-color, #6c757d);
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.status-badge:hover {
+  background: rgba(var(--status-color-rgb, 108, 117, 125), 0.15);
+}
+
+.status-badge.status-available {
+  --status-color-rgb: 40, 167, 69;
+  color: #28a745;
+}
+
+.status-badge.status-unavailable {
+  --status-color-rgb: 220, 53, 69;
+  color: #dc3545;
+}
+
+.status-badge.status-rate_limited {
+  --status-color-rgb: 255, 193, 7;
+  color: #ffc107;
+}
+
+.status-badge.status-error {
+  --status-color-rgb: 253, 126, 20;
+  color: #fd7e14;
+}
+
+.status-badge.status-loading {
+  --status-color-rgb: 108, 117, 125;
+  color: #6c757d;
+}
+
+.status-badge.status-unknown {
+  --status-color-rgb: 108, 117, 125;
+  color: #6c757d;
+}
+
+.status-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.status-spinner {
+  width: 12px;
+  height: 12px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.status-label {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.status-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 12px;
+  background: var(--card-bg, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+  gap: 12px;
+}
+
+.status-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.model-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.provider-name {
+  font-size: 0.75rem;
+  color: var(--text-secondary, #aaa);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.model-name {
+  font-size: 0.9rem;
+  color: var(--text-color, #fff);
+  font-weight: 500;
+}
+
+.status-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #aaa);
+  line-height: 1.4;
+}
+
+.last-check {
+  font-size: 0.75rem;
+  color: var(--text-muted, #666);
+  font-style: italic;
+}
+
+.status-actions {
+  display: flex;
+  align-items: flex-start;
+}
+
+.refresh-status-btn {
+  background: var(--button-bg, #333);
+  border: 1px solid var(--border-color, #444);
+  color: var(--text-color, #fff);
+  padding: 6px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+}
+
+.refresh-status-btn:hover:not(:disabled) {
+  background: var(--button-hover-bg, #444);
+  transform: scale(1.05);
+}
+
+.refresh-status-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.additional-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--details-bg, rgba(255, 255, 255, 0.02));
+  border: 1px solid var(--border-color, #333);
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+}
+
+.detail-label {
+  color: var(--text-secondary, #aaa);
+  font-weight: 500;
+}
+
+.detail-value {
+  color: var(--text-color, #fff);
+  font-weight: 400;
+  font-family: 'Courier New', monospace;
+}
+
+/* Animations */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .status-details {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .status-actions {
+    align-self: flex-end;
+  }
+  
+  .detail-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}
+
+/* Variants */
+.model-status-indicator.inline {
+  display: inline-flex;
+  align-items: center;
+}
+
+.model-status-indicator.card {
+  padding: 12px;
+  background: var(--card-bg, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--border-color, #333);
+  border-radius: 8px;
+}
+
+/* Status-specific styles */
+.status-badge.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.7; }
+  100% { opacity: 1; }
+}

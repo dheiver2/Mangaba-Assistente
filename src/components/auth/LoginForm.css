@@ -1,0 +1,331 @@
+/* LoginForm.css - Estilos avançados para o formulário de login */
+
+.login-form-card {
+  background: white;
+  border-radius: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.login-form-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #10A37F 0%, #0d8a6b 100%);
+  border-radius: 16px;
+  margin: 0 auto 24px auto;
+  color: white;
+  animation: iconPulse 2s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(16, 163, 127, 0.3);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 15px rgba(16, 163, 127, 0);
+  }
+}
+
+.login-form-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #202123;
+  margin: 0 0 8px 0;
+  background: linear-gradient(135deg, #202123 0%, #10A37F 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.login-form-subtitle {
+  font-size: 16px;
+  color: #6B6C7B;
+  margin: 0;
+  font-weight: 400;
+}
+
+.login-form-error {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border: 1px solid #fca5a5;
+  border-radius: 12px;
+  color: #dc2626;
+  font-size: 14px;
+  animation: errorShake 0.5s ease-in-out;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.form-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input-icon {
+  position: absolute;
+  left: 16px;
+  z-index: 1;
+  color: #9CA3AF;
+  transition: color 0.3s ease;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 16px 16px 48px;
+  border: 2px solid #E5E7EB;
+  border-radius: 12px;
+  font-size: 16px;
+  background: #F9FAFB;
+  color: #111827;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: #10A37F;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+}
+
+.form-input:focus + .form-input-icon,
+.form-input-wrapper:hover .form-input-icon {
+  color: #10A37F;
+}
+
+.form-input-toggle {
+  position: absolute;
+  right: 16px;
+  z-index: 1;
+  background: none;
+  border: none;
+  color: #9CA3AF;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.form-input-toggle:hover {
+  color: #10A37F;
+  background: rgba(16, 163, 127, 0.1);
+}
+
+.form-submit-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #10A37F 0%, #0d8a6b 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.form-submit-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.form-submit-button:hover::before {
+  left: 100%;
+}
+
+.form-submit-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(16, 163, 127, 0.3);
+}
+
+.form-submit-button:active {
+  transform: translateY(0);
+}
+
+.form-submit-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.form-submit-button:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.form-switch {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.form-switch p {
+  font-size: 14px;
+  color: #6B7280;
+  margin: 0;
+}
+
+.form-switch-link {
+  background: none;
+  border: none;
+  color: #10A37F;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.form-switch-link:hover {
+  color: #0d8a6b;
+  background: rgba(16, 163, 127, 0.1);
+}
+
+.form-demo-credentials {
+  padding-top: 24px;
+  border-top: 1px solid #E5E7EB;
+}
+
+.demo-credentials-content {
+  text-align: center;
+  padding: 16px;
+  background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+  border-radius: 12px;
+  border: 1px solid #D1D5DB;
+}
+
+.demo-credentials-title {
+  font-size: 12px;
+  color: #6B7280;
+  margin: 0 0 8px 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.demo-credentials-content p {
+  font-size: 13px;
+  color: #374151;
+  margin: 4px 0;
+}
+
+.demo-credentials-content strong {
+  color: #10A37F;
+  font-weight: 600;
+}
+
+/* Animações de entrada */
+.login-form-card {
+  animation: formSlideIn 0.6s ease-out;
+}
+
+@keyframes formSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.form-group {
+  animation: formGroupFadeIn 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.form-group:nth-child(1) { animation-delay: 0.1s; }
+.form-group:nth-child(2) { animation-delay: 0.2s; }
+
+@keyframes formGroupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-submit-button {
+  animation: buttonFadeIn 0.6s ease-out 0.3s both;
+}
+
+@keyframes buttonFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 480px) {
+  .login-form-title {
+    font-size: 24px;
+  }
+  
+  .login-form-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .form-input {
+    padding: 14px 14px 14px 44px;
+    font-size: 16px; /* Evita zoom no iOS */
+  }
+  
+  .form-submit-button {
+    padding: 14px 20px;
+  }
+}

@@ -1,0 +1,328 @@
+.advanced-settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.advanced-settings-modal {
+  background: var(--bg-color);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 700px;
+  max-height: 90vh;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+}
+
+.advanced-settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.advanced-settings-header h2 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background-color: var(--active-bg);
+  color: var(--text-color);
+}
+
+.advanced-settings-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.settings-section {
+  margin-bottom: 32px;
+}
+
+.settings-section:last-child {
+  margin-bottom: 0;
+}
+
+.settings-section h3 {
+  margin: 0 0 20px 0;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 8px;
+}
+
+.setting-item {
+  margin-bottom: 24px;
+}
+
+.setting-item:last-child {
+  margin-bottom: 0;
+}
+
+.setting-item label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.setting-control {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.setting-control input[type="range"] {
+  flex: 1;
+  height: 6px;
+  background: var(--secondary-bg);
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.setting-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--primary-color);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.setting-control input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.setting-control input[type="number"] {
+  width: 100px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--secondary-bg);
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+.setting-control input[type="number"]:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.setting-value {
+  min-width: 40px;
+  text-align: center;
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.setting-description {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.setting-item textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--secondary-bg);
+  color: var(--text-color);
+  font-size: 14px;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.setting-item textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.checkbox-label {
+  display: flex !important;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  margin-bottom: 0 !important;
+}
+
+.checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--secondary-bg);
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkmark::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.advanced-settings-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-top: 1px solid var(--border-color);
+  background: var(--secondary-bg);
+}
+
+.footer-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.reset-btn, .cancel-btn, .save-btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.reset-btn {
+  background: var(--secondary-bg);
+  color: var(--text-secondary);
+  border-color: var(--border-color);
+}
+
+.reset-btn:hover {
+  background: var(--active-bg);
+  color: var(--text-color);
+}
+
+.cancel-btn {
+  background: var(--secondary-bg);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.cancel-btn:hover {
+  background: var(--active-bg);
+}
+
+.save-btn {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.save-btn:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+/* Scrollbar styling */
+.advanced-settings-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.advanced-settings-content::-webkit-scrollbar-track {
+  background: var(--secondary-bg);
+  border-radius: 3px;
+}
+
+.advanced-settings-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+.advanced-settings-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .advanced-settings-modal {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .advanced-settings-header {
+    padding: 16px 20px;
+  }
+  
+  .advanced-settings-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .advanced-settings-content {
+    padding: 16px 20px;
+  }
+  
+  .advanced-settings-footer {
+    padding: 16px 20px;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .footer-actions {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .setting-control {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .setting-control input[type="number"] {
+    width: 100%;
+  }
+}

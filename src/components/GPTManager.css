@@ -1,0 +1,275 @@
+.gpt-manager-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.gpt-manager {
+  background: var(--secondary-bg);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.gpt-manager-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.gpt-manager-header h2 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-color);
+}
+
+.gpt-manager-content {
+  padding: 20px;
+  max-height: calc(80vh - 80px);
+  overflow-y: auto;
+}
+
+.gpts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.gpt-card {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: var(--hover-bg);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.gpt-card:hover {
+  background: var(--active-bg);
+  transform: translateY(-1px);
+}
+
+.gpt-card.active {
+  border-color: var(--primary-color);
+  background: var(--active-bg);
+}
+
+.gpt-info {
+  flex: 1;
+}
+
+.gpt-info h3 {
+  margin: 0 0 4px 0;
+  color: var(--text-color);
+  font-size: 1.1rem;
+}
+
+.gpt-info p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.delete-gpt-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  opacity: 0.6;
+}
+
+.delete-gpt-btn:hover {
+  background: #6b7280;
+  opacity: 1;
+}
+
+.create-gpt-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.create-gpt-btn:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.create-gpt-form {
+  background: var(--hover-bg);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.create-gpt-form h3 {
+  margin: 0 0 20px 0;
+  color: var(--text-color);
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: var(--text-color);
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.cancel-btn,
+.save-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  background: var(--hover-bg);
+  color: var(--text-color);
+}
+
+.cancel-btn:hover {
+  background: var(--active-bg);
+}
+
+.save-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.save-btn:disabled {
+  background: var(--hover-bg);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.gpt-provider {
+  margin-top: 8px;
+}
+
+.provider-badge {
+  display: inline-block;
+  background: var(--primary-color);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Scrollbar customization */
+.gpt-manager-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.gpt-manager-content::-webkit-scrollbar-track {
+  background: var(--secondary-bg);
+}
+
+.gpt-manager-content::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+.gpt-manager-content::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}

@@ -1,0 +1,337 @@
+.gpt-selector {
+  position: relative;
+  display: inline-block;
+}
+
+.gpt-selector-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: var(--bg-color, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 48px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.gpt-selector-trigger:has(.current-gpt) {
+  min-width: 200px;
+}
+
+.gpt-info-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.gpt-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--primary-color, #6b7280);
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gpt-selector-trigger:hover .gpt-icon {
+  color: var(--primary-color, #4f46e5);
+}
+
+.gpt-selector-trigger:hover {
+  background: var(--hover-bg, #f8f9fa);
+  border-color: var(--primary-color, #6b7280);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.gpt-selector.compact .gpt-selector-trigger {
+  min-width: 44px;
+  width: 44px;
+  height: 44px;
+  padding: 8px;
+  border-radius: 8px;
+  justify-content: center;
+}
+
+.current-gpt {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+}
+
+.current-gpt .gpt-name {
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.current-gpt .gpt-description {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.gpt-selector.compact .current-gpt .gpt-description {
+  display: none;
+}
+
+.dropdown-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.gpt-selector-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+}
+
+.gpt-selector-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: var(--bg-color, #ffffff);
+  border: 1px solid var(--border-color, #e9ecef);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 300px;
+  overflow-y: auto;
+  animation: dropdownSlideIn 0.2s ease;
+}
+
+.gpt-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.gpt-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+.gpt-item-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.gpt-item-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--primary-color, #6b7280);
+  flex-shrink: 0;
+}
+
+.gpt-item:hover {
+  background: var(--hover-bg, #f8f9fa);
+  border-color: var(--primary-color, #6b7280);
+}
+
+.gpt-item.active {
+  background: var(--primary-color, #6b7280);
+  color: white;
+  border-left: 3px solid var(--success-color, #22c55e);
+}
+
+.gpt-item.active .gpt-item-icon {
+  color: white;
+}
+
+.gpt-item:last-child {
+  border-bottom: none;
+}
+
+.gpt-info {
+  flex: 1;
+}
+
+.gpt-info .gpt-name {
+  font-weight: 500;
+  color: var(--text-color);
+  font-size: 0.9rem;
+  margin-bottom: 2px;
+}
+
+.gpt-info .gpt-description {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.gpt-info .gpt-provider {
+  font-size: 0.7rem;
+  color: var(--primary-color);
+  background: var(--primary-color);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.delete-gpt-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  opacity: 0.6;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delete-gpt-btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.delete-gpt-btn:hover {
+  background: var(--hover-bg);
+  color: #ef4444;
+  opacity: 1;
+}
+
+.gpt-actions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-color);
+  background: var(--hover-bg);
+}
+
+.create-gpt-btn {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.create-gpt-btn:hover {
+  background: var(--primary-hover);
+}
+
+.create-gpt-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.create-gpt-form input,
+.create-gpt-form textarea,
+.create-gpt-form select {
+  padding: 8px 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.create-gpt-form input:focus,
+.create-gpt-form textarea:focus,
+.create-gpt-form select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.create-gpt-form textarea {
+  resize: vertical;
+  min-height: 60px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.cancel-btn,
+.save-btn {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancel-btn {
+  background: var(--hover-bg);
+  color: var(--text-color);
+}
+
+.cancel-btn:hover {
+  background: var(--active-bg);
+}
+
+.save-btn {
+  background: var(--primary-color);
+  color: white;
+}
+
+.save-btn:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.save-btn:disabled {
+  background: var(--hover-bg);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Scrollbar customization */
+.gpt-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.gpt-list::-webkit-scrollbar-track {
+  background: var(--secondary-bg);
+}
+
+.gpt-list::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 3px;
+}
+
+.gpt-list::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}

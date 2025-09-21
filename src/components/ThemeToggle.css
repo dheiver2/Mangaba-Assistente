@@ -1,0 +1,186 @@
+/* Theme Toggle - Design Moderno */
+.theme-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.theme-toggle:hover {
+  transform: scale(1.05);
+}
+
+.theme-toggle:active {
+  transform: scale(0.95);
+}
+
+.toggle-track {
+  width: 52px;
+  height: 28px;
+  background: var(--toggle-track-bg, #e5e5e5);
+  border-radius: 50px;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid var(--toggle-border, #d1d5db);
+}
+
+.toggle-thumb {
+  width: 24px;
+  height: 24px;
+  background: var(--toggle-thumb-bg, #ffffff);
+  border-radius: 50%;
+  position: absolute;
+  top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-thumb.light {
+  left: 1px;
+  background: #fbbf24;
+  box-shadow: 0 2px 8px rgba(251, 191, 36, 0.3);
+}
+
+.toggle-thumb.dark {
+  left: 25px;
+  background: #1e293b;
+  box-shadow: 0 2px 8px rgba(30, 41, 59, 0.3);
+}
+
+.toggle-icon {
+  width: 14px;
+  height: 14px;
+  color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.toggle-thumb.light .toggle-icon {
+  color: #ffffff;
+}
+
+.toggle-thumb.dark .toggle-icon {
+  color: #fbbf24;
+}
+
+/* Variações de tamanho */
+.theme-toggle.small .toggle-track {
+  width: 40px;
+  height: 22px;
+}
+
+.theme-toggle.small .toggle-thumb {
+  width: 18px;
+  height: 18px;
+}
+
+.theme-toggle.small .toggle-thumb.dark {
+  left: 19px;
+}
+
+.theme-toggle.small .toggle-icon {
+  width: 10px;
+  height: 10px;
+}
+
+.theme-toggle.large .toggle-track {
+  width: 64px;
+  height: 34px;
+}
+
+.theme-toggle.large .toggle-thumb {
+  width: 30px;
+  height: 30px;
+}
+
+.theme-toggle.large .toggle-thumb.dark {
+  left: 31px;
+}
+
+.theme-toggle.large .toggle-icon {
+  width: 18px;
+  height: 18px;
+}
+
+/* Temas */
+:root {
+  --toggle-track-bg: #e5e5e5;
+  --toggle-border: #d1d5db;
+  --toggle-thumb-bg: #ffffff;
+}
+
+[data-theme="dark"] {
+  --toggle-track-bg: #374151;
+  --toggle-border: #4b5563;
+  --toggle-thumb-bg: #1f2937;
+}
+
+/* Estados de hover */
+.theme-toggle:hover .toggle-track {
+  background: var(--toggle-track-hover, #d1d5db);
+  border-color: var(--toggle-border-hover, #9ca3af);
+}
+
+[data-theme="dark"] .theme-toggle:hover .toggle-track {
+  --toggle-track-hover: #4b5563;
+  --toggle-border-hover: #6b7280;
+}
+
+/* Animação de entrada */
+@keyframes toggleAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.theme-toggle {
+  animation: toggleAppear 0.3s ease;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .theme-toggle.medium {
+    transform: scale(0.9);
+  }
+  
+  .theme-toggle.large {
+    transform: scale(0.8);
+  }
+}
+
+/* Acessibilidade */
+.theme-toggle:focus {
+  outline: 2px solid var(--primary-color, #10a37f);
+  outline-offset: 2px;
+}
+
+.theme-toggle:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Para usuários que preferem movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle,
+  .toggle-track,
+  .toggle-thumb,
+  .toggle-icon {
+    transition: none;
+  }
+  
+  .theme-toggle {
+    animation: none;
+  }
+}

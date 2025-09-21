@@ -1,0 +1,82 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment files
+# IMPORTANTE: Protege arquivos com informações sensíveis
+.env.local
+.env.*.local
+.env.production
+.env.staging
+backend/.env.local
+backend/.env.*.local
+backend/.env.production
+backend/.env.staging
+
+# Arquivos de configuração sensíveis
+config/production.json
+config/staging.json
+backend/config/production.json
+backend/config/staging.json
+
+# Chaves e certificados
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+keys/
+
+# Backups e dumps de banco
+*.sql
+*.dump
+*.backup
+backups/
+
+# Arquivos de cache e temporários
+.cache/
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Arquivos de upload (se contiverem dados sensíveis)
+uploads/
+public/uploads/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Sistema operacional
+Thumbs.db
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Arquivos de monitoramento e métricas
+.nyc_output/
+coverage/
+*.lcov
+
+# Arquivos de teste com dados sensíveis
+test-data/
+fixtures/sensitive/

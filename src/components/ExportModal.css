@@ -1,0 +1,236 @@
+/* Export Modal */
+.export-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  backdrop-filter: blur(4px);
+}
+
+.export-modal {
+  background: var(--bg-color);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border-color);
+}
+
+.export-modal-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--secondary-bg);
+}
+
+.export-modal-header h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--text-muted);
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.close-btn:hover {
+  background: var(--hover-bg);
+  color: var(--text-color);
+}
+
+.export-modal-content {
+  padding: 20px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.conversation-info {
+  margin-bottom: 24px;
+  padding: 16px;
+  background: var(--secondary-bg);
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.conversation-info h4 {
+  margin: 0 0 8px 0;
+  color: var(--text-color);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.conversation-info p {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+
+.export-options {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option-group > label {
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.format-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.format-option {
+  padding: 12px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--secondary-bg);
+}
+
+.format-option:hover {
+  border-color: var(--primary-color);
+  background: var(--hover-bg);
+}
+
+.format-option.selected {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+  color: white;
+}
+
+.format-icon {
+  font-size: 24px;
+}
+
+.format-label {
+  font-size: 12px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.checkbox-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+.checkbox-option input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--primary-color);
+}
+
+.export-modal-footer {
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  background: var(--secondary-bg);
+}
+
+.cancel-btn {
+  padding: 10px 20px;
+  border: 1px solid var(--border-color);
+  background: var(--secondary-bg);
+  color: var(--text-color);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+  background: var(--hover-bg);
+}
+
+.export-btn {
+  padding: 10px 20px;
+  border: none;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+
+.export-btn:hover {
+  background: var(--primary-hover);
+}
+
+.export-icon {
+  font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .export-modal {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .format-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .export-modal-footer {
+    flex-direction: column;
+  }
+  
+  .cancel-btn,
+  .export-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

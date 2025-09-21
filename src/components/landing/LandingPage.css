@@ -1,0 +1,254 @@
+/* Landing Page - Paleta ChatGPT/OpenAI */
+:root {
+  /* Variáveis alinhadas com App.css - Modo Claro */
+  --landing-bg-color: #FFFFFF;
+  --landing-text-color: #202123;
+  --landing-text-muted: #6B6C7B;
+  --landing-border-color: #E5E5E5;
+  --landing-primary-color: #10A37F;
+  --landing-primary-hover: #0d8a6b;
+  --landing-secondary-bg: #F7F7F8;
+  --landing-hover-bg: #F7F7F8;
+  --landing-active-bg: #E5E5E5;
+  --landing-input-bg: #F7F7F8;
+  --landing-accent-color: #10A37F;
+  --landing-success-color: #10A37F;
+  --landing-warning-color: #10A37F;
+  
+  /* Gradientes usando cores do sistema */
+  --landing-gradient-primary: linear-gradient(135deg, #FFFFFF 0%, #F7F7F8 100%);
+  --landing-gradient-secondary: linear-gradient(135deg, #F7F7F8 0%, #E5E5E5 100%);
+  --landing-gradient-accent: linear-gradient(135deg, #0d8a6b 0%, #10A37F 50%, #0a7c5a 100%);
+  --landing-gradient-hero: linear-gradient(135deg, #FFFFFF 0%, #F7F7F8 50%, #E5E5E5 100%);
+}
+
+/* Modo Escuro - Paleta ChatGPT/OpenAI */
+[data-theme="dark"] {
+  --landing-bg-color: #343541;
+  --landing-text-color: #ECECF1;
+  --landing-text-muted: #ACACBE;
+  --landing-border-color: #565869;
+  --landing-primary-color: #10A37F;
+  --landing-primary-hover: #0d8a6b;
+  --landing-secondary-bg: #40414F;
+  --landing-hover-bg: #40414F;
+  --landing-active-bg: #565869;
+  --landing-input-bg: #40414F;
+  --landing-accent-color: #10A37F;
+  --landing-success-color: #10A37F;
+  --landing-warning-color: #10A37F;
+  
+  /* Gradientes para modo escuro */
+  --landing-gradient-primary: linear-gradient(135deg, #343541 0%, #40414F 100%);
+  --landing-gradient-secondary: linear-gradient(135deg, #40414F 0%, #565869 100%);
+  --landing-gradient-accent: linear-gradient(135deg, #15d49a 0%, #10A37F 50%, #0d8a6b 100%);
+  --landing-gradient-hero: linear-gradient(135deg, #343541 0%, #40414F 50%, #565869 100%);
+}
+
+.landing-page {
+  background-color: var(--landing-bg-color);
+  color: var(--landing-text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  min-height: 100vh;
+  padding-top: 80px; /* Compensar navbar fixo */
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Estilos globais para seções */
+.landing-section {
+  padding: 5rem 2rem;
+  background: var(--landing-bg-color);
+  position: relative;
+}
+
+.landing-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: var(--landing-text-color);
+  background: var(--landing-gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.section-subtitle {
+  font-size: 1.2rem;
+  color: var(--landing-text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Botões usando paleta do sistema */
+.landing-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--landing-primary-color);
+  color: var(--landing-bg-color);
+}
+
+.landing-btn:hover {
+  background: var(--landing-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(75, 85, 99, 0.15);
+}
+
+.landing-btn-secondary {
+  background: var(--landing-secondary-bg);
+  color: var(--landing-text-color);
+  border: 2px solid var(--landing-border-color);
+}
+
+.landing-btn-secondary:hover {
+  background: var(--landing-hover-bg);
+  border-color: var(--landing-primary-color);
+}
+
+.landing-btn-large {
+  padding: 1.2rem 2.5rem;
+  font-size: 1.2rem;
+}
+
+/* Cards usando paleta do sistema */
+.landing-card {
+  background: var(--landing-input-bg);
+  border: 1px solid var(--landing-border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.landing-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-color: var(--landing-primary-color);
+}
+
+/* Badges e elementos destacados */
+.landing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--landing-secondary-bg);
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  border: 1px solid var(--landing-border-color);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--landing-text-color);
+}
+
+/* Elementos de destaque */
+.landing-highlight {
+  background: var(--landing-gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
+
+/* Barra de rolagem personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--landing-secondary-bg);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--landing-primary-color);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--landing-primary-hover);
+}
+
+/* Para Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--landing-primary-color) var(--landing-secondary-bg);
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* Animações suaves */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .landing-section {
+    padding: 3rem 1rem;
+  }
+  
+  .section-title {
+    font-size: 2rem;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem;
+  }
+  
+  .landing-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .landing-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-title {
+    font-size: 1.8rem;
+  }
+  
+  .landing-btn {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}
