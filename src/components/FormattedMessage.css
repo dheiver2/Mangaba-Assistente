@@ -1,11 +1,25 @@
 /* FormattedMessage Component Styles */
 .formatted-message {
   width: 100%;
+  position: relative;
 }
 
 .formatted-content {
-  line-height: 1.6;
+  line-height: 1.7;
   font-size: 15px;
+  color: var(--text-color);
+  animation: fadeInContent 0.5s ease-out;
+}
+
+@keyframes fadeInContent {
+  0% {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .formatted-content h1,
@@ -71,31 +85,60 @@
 .code-block-container {
   margin: 16px 0;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 12px;
   overflow: hidden;
   background: var(--secondary-bg);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.code-block-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.code-block-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+  border-radius: 12px 12px 0 0;
 }
 
 .code-block-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  background: var(--hover-bg);
+  padding: 12px 16px;
+  background: linear-gradient(135deg, var(--hover-bg), var(--secondary-bg));
   border-bottom: 1px solid var(--border-color);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
+  backdrop-filter: blur(10px);
 }
 
 .code-language {
-  color: var(--text-secondary);
+  color: var(--primary-color);
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.8px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-language::before {
+  content: '⚡';
+  font-size: 14px;
 }
 
 .code-actions {
   display: flex;
-  gap: 4px;
+  gap: 6px;
 }
 
 .copy-btn,

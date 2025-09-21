@@ -104,27 +104,50 @@
 .new-chat-btn {
   width: 44px;
   height: 44px;
-  background: var(--primary-color);
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
   color: white;
   border: none;
   padding: 0;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   font-size: 15px;
   font-weight: 600;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
-  box-shadow: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(16, 163, 127, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.new-chat-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.4s ease;
 }
 
 .new-chat-btn:hover {
-  background: var(--primary-hover);
+  background: linear-gradient(135deg, var(--primary-hover), var(--primary-color));
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(16, 163, 127, 0.4);
+}
+
+.new-chat-btn:hover::before {
+  width: 100%;
+  height: 100%;
 }
 
 .new-chat-btn:active {
-  background: var(--primary-hover);
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
 }
 
 .new-chat-btn .icon {
@@ -153,30 +176,55 @@
   height: 44px;
   background: transparent;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  color: #424242;
+  color: var(--text-muted);
   position: relative;
   flex-shrink: 0;
   border: 2px solid transparent;
+  overflow: hidden;
+}
+
+.action-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: var(--primary-color);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  opacity: 0.1;
+}
+
+.action-btn:hover {
+  background: var(--hover-bg);
+  color: var(--primary-color);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-btn:hover::before {
+  width: 100%;
+  height: 100%;
 }
 
 .action-btn:active {
   background: var(--active-bg);
+  transform: translateY(0) scale(0.98);
+  transition: all 0.1s ease;
 }
 
 .action-btn:focus {
   outline: none;
   border-color: var(--primary-color);
-}
-
-.action-btn:hover {
-  background: var(--hover-bg);
-  color: var(--text-color);
+  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.2);
 }
 
 
@@ -409,21 +457,43 @@
   align-items: center;
   padding: 8px 12px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border-left: 3px solid transparent;
+  border-radius: 8px;
+  margin: 2px 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.conversation-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(16, 163, 127, 0.1), transparent);
+  transition: left 0.5s ease;
 }
 
 .conversation-item:hover {
   background: rgba(16, 163, 127, 0.1);
   color: var(--primary-color);
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(16, 163, 127, 0.15);
+}
 
+.conversation-item:hover::before {
+  left: 100%;
 }
 
 .conversation-item.active {
-  background: rgba(16, 163, 127, 0.2);
+  background: linear-gradient(135deg, rgba(16, 163, 127, 0.2), rgba(16, 163, 127, 0.1));
   color: var(--primary-color);
   border-left: 3px solid var(--primary-color);
   font-weight: 600;
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(16, 163, 127, 0.2);
 }
 
 .conversation-content {
